@@ -1,0 +1,52 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+    userId Int @id @default(autoincrement()) @map("userId")
+    email String @unique @map("email")
+    password String @map("password")
+    nickname String @unique @map("nickname")
+    userType String @default("user") @map("userType")
+
+
+    createdAt DateTime @default(now()) @map("createdAt")
+    updatedAt DateTime @updatedAt @map("updatedAt")
+    boards Boards[]
+    @@map("Users")
+}
+
+enum UserType {
+  USER
+  MANAGER
+}
+
+model Boards {
+  boardId Int @id @default(autoincrement()) @map("boardId")
+  title String @map("title")
+  content String @map("content")
+  createdAt DateTime @default(now()) @map("createdAt")
+  updatedAt DateTime @updatedAt @map("updatedAt")
+  userId    Int      @map("userId")
+  user      Users    @relation(fields: [userId], references: [userId])
+  answers Answers[]
+  @@map("Boards")
+}
+
+model Answers {
+  answerId Int @id @default(autoincrement()) @map("answerId")
+  content String @map("content")
+  selected Boolean @default(false) @map("selected")
+  createdAt DateTime @default(now()) @map("createdAt")
+  updatedAt DateTime @updatedAt @map("updatedAt")
+  userId    Int      @map("userId")
+  boardId   Int      @map("boardId")
+  board      Boards    @relation(fields: [boardId], references: [boardId])
+  @@map ("Answers")
+}

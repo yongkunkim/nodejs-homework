@@ -19,9 +19,17 @@
   },
   "homepage": "https://github.com/yongkunkim/nodejs-homework#readme",
   "dependencies": {
+    "@prisma/client": "^5.7.1",
+    "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.6",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
+    "express-validator": "^7.0.1",
     "git": "^0.1.5",
+    "jsonwebtoken": "^9.0.2",
     "nodemon": "^3.0.2"
+  },
+  "devDependencies": {
+    "prisma": "^5.7.1"
   }
 }
