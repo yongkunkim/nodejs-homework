@@ -12,11 +12,4 @@ router.post("/sign-up", ValidationCheck, authController.signup);
 //로그인
 router.post("/sign-in", authController.signin);
 
-//매니저 승급
-router.put(
-  "/change-usertype/:userId",
-  authMiddleware,
-  authController.changeUserTypeByManager
-);
-
 export default router;

@@ -76,6 +76,7 @@ export class AuthService {
     const token = jwt.sign(
       {
         userId: signinInfo.userId,
+        userType: userType,
       },
       process.env.SECRET_KEY,
       {
@@ -85,6 +86,4 @@ export class AuthService {
 
     return { token, userType };
   };
-
-  //내 정보 조회
 }

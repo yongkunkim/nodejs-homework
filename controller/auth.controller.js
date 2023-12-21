@@ -8,7 +8,7 @@ export class AuthController {
       {
         const { email, nickname, password, passwordConfirm, userType } =
           req.body;
-        await this.authService.signup(
+        const user = await this.authService.signup(
           email,
           nickname,
           password,
@@ -18,6 +18,7 @@ export class AuthController {
         return res.send({
           success: true,
           message: "회원가입이 완료되었습니다.",
+          userType: `${user.userType}`,
         });
       }
     } catch (e) {
@@ -49,12 +50,5 @@ export class AuthController {
     } catch (err) {
       next(err);
     }
-  };
-
-  //매니저가 회원종류 수정
-  changeUserTypeByManager = async (req, res, next) => {
-    const { userId } = req.params;
-    const { userType } = req.body;
-    console.log(manager);
   };
 }
