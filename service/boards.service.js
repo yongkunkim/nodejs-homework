@@ -45,7 +45,7 @@ export class BoardsService {
   createQuestion = async (title, content, userId, userType) => {
     try {
       if (userType === "manager") {
-        throw new ValidateError("매니저는 질문글을 작성할 수 없습니다.", 401);
+        throw new ValidateError("매니저는 작성할 수 없습니다.", 401);
       }
       if (!title && !content) {
         throw new ValidateError("제목과 내용을 모두 입력해주세요", 403);

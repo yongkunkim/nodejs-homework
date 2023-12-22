@@ -12,6 +12,8 @@ export class BoardsRepository {
       select: {
         title: true,
         content: true,
+        createdAt: true,
+        updatedAt: true,
       },
     });
   };
@@ -36,6 +38,8 @@ export class BoardsRepository {
       select: {
         title: true,
         content: true,
+        createdAt: true,
+        updatedAt: true,
       },
     });
   };
