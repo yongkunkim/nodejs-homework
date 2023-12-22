@@ -73,7 +73,7 @@ export class AnswersRepository {
 
   //답변 채택하기
   selectAnswer = async (boardId, answerId) => {
-    const answer = await prisma.answers.findUnique({
+    const answer = await prisma.answers.findMany({
       where: { boardId, answerId },
     });
 
@@ -85,7 +85,6 @@ export class AnswersRepository {
       where: { boardId, answerId },
       data: { selected: true },
     });
-
     return selectedAnswer;
   };
 
@@ -99,9 +98,8 @@ export class AnswersRepository {
     });
   };
 
-  //채택된 답변 취소
-  cancelSelected = async (boardId, answerId) => {
-    // 게시판에 해당하는 답변인지 확인
+  //채택 변경시에 기존 채택된 내용 취소
+  unselectAnswer = async (boardId, answerId) => {
     const answer = await prisma.answers.findUnique({
       where: { boardId, answerId },
     });
@@ -110,6 +108,21 @@ export class AnswersRepository {
       throw new Error("해당하는 답변을 찾을 수 없습니다.");
     }
 
+    return await prisma.answers.update({
+      where: { boardId, answerId },
+      data: { selected: false },
+    });
+  };
+
+  //답변 삭제하기
+  deleteAnswer = async (boardId, answerId) => {
+    return await prisma.answers.delete({
+      where: { boardId, answerId },
+    });
+  };
+
+  // 채택된 답변 취소
+  cancelSelected = async (boardId, answerId) => {
     return await prisma.answers.update({
       where: { boardId, answerId },
       data: { selected: false },

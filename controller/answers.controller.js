@@ -69,4 +69,23 @@ export class AnswersController {
       next(e);
     }
   };
+
+  //답변 삭제
+  deleteAnswer = async (req, res, next) => {
+    try {
+      const boardId = parseInt(req.params.boardId);
+      const answerId = parseInt(req.params.answerId);
+      const userId = parseInt(req.locals.userId);
+      const userType = req.locals.userType;
+      await this.answersService.deleteAnswer(
+        boardId,
+        answerId,
+        userId,
+        userType
+      );
+      res.status(200).send({ message: "삭제 완료." });
+    } catch (e) {
+      next(e);
+    }
+  };
 }

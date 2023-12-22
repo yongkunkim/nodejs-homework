@@ -48,6 +48,9 @@ export class AnswersService {
   //답변 수정하기
   updateAnswer = async (answerId, userId, boardId, content) => {
     try {
+      if (!content) {
+        throw new ValidateError("수정내용을 입력해주세요.", 403);
+      }
       const answers = await this.answersRepository.findAnswerByboardId(boardId);
       if (answers.length < 1) {
         throw new ValidateError("존재하지 않는 질문글입니다.", 403);
@@ -83,11 +86,31 @@ export class AnswersService {
     const selectedAnswers = await this.answersRepository.getSelectedAnswers(
       boardId
     );
+
     if (selectedAnswers.length > 0) {
+      if (selectedAnswers[0].answerId === answerId) {
+        return await this.answersRepository.cancelSelected(boardId, answerId);
+      }
       const selectedAnswerId = selectedAnswers[0].answerId;
-      await this.answersRepository.cancelSelected(boardId, selectedAnswerId);
+      await this.answersRepository.unselectAnswer(boardId, selectedAnswerId);
     }
 
     return await this.answersRepository.selectAnswer(boardId, answerId);
+  };
+
+  //답변 삭제하기
+  deleteAnswer = async (boardId, answerId, userId, userType) => {
+    if (userType === "manager") {
+      return await this.answersRepository.deleteAnswer(boardId, answerId);
+    }
+    const answer = await this.answersRepository.findAnswer(boardId, answerId);
+    if (!answer) {
+      throw new ValidateError("존재하지 않는 답변입니다", 404);
+    }
+    if (answer.userId !== userId) {
+      throw new ValidateError("권한이 없습니다.", 401);
+    }
+
+    return await this.answersRepository.deleteAnswer(boardId, answerId);
   };
 }

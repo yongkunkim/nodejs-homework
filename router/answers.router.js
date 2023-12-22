@@ -26,4 +26,11 @@ router.put(
   authMiddleware,
   answersController.selectAnswer
 );
+
+//답변 삭제
+router.delete(
+  "/:boardId/answers/:answerId",
+  authMiddleware,
+  answersController.deleteAnswer
+);
 export default router;
