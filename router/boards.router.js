@@ -7,10 +7,14 @@ const boardsController = new BoardsController();
 
 //질문글 리스트 확인
 router.get("/", authMiddleware, boardsController.getQuestionList);
+//질문글 상세조회
+router.get("/:boardId", authMiddleware, boardsController.getQuestionDetail);
 //질문글 검색으로 조회하기
 router.get("/search", authMiddleware, boardsController.searchQuestionList);
 //질문글 작성하기
 router.post("/", authMiddleware, boardsController.createQuestion);
 //질문글 수정하기
 router.put("/:boardId", authMiddleware, boardsController.updateQuestion);
+//질문글 삭제하기
+router.delete("/:boardId", authMiddleware, boardsController.deleteQuestion);
 export default router;

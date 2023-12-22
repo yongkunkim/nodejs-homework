@@ -14,6 +14,20 @@ export class BoardsController {
     }
   };
 
+  //질문글 상세조회
+  getQuestionDetail = async (req, res, next) => {
+    try {
+      const userType = req.locals.userType;
+      const boardId = parseInt(req.params.boardId);
+      const questionDetail = await this.boardsService.getQuestionDetail(
+        userType,
+        boardId
+      );
+      res.status(200).send(questionDetail);
+    } catch (e) {
+      next(e);
+    }
+  };
   //질문글 검색으로 조회하기
   searchQuestionList = async (req, res, next) => {
     try {
@@ -52,8 +66,35 @@ export class BoardsController {
 
   //질문글 수정하기
   updateQuestion = async (req, res, next) => {
-    const boardId = req.params;
-    const userId = parseInt(req.locals.userId);
-    const { title, content } = req.body;
+    try {
+      const boardId = parseInt(req.params.boardId);
+      const userId = parseInt(req.locals.userId);
+      const { title, content } = req.body;
+      if (!title && !content) {
+        res.status(403).send({ message: "수정할 정보를 입력해주세요." });
+      }
+      const updatedQuestion = await this.boardsService.updateQuestion(
+        boardId,
+        userId,
+        title,
+        content
+      );
+      res.status(200).send(updatedQuestion);
+    } catch (e) {
+      next(e);
+    }
+  };
+
+  //질문글 삭제하기(매니저도 가능)
+  deleteQuestion = async (req, res, next) => {
+    try {
+      const boardId = parseInt(req.params.boardId);
+      const userId = parseInt(req.locals.userId);
+      const userType = req.locals.userType;
+      await this.boardsService.deleteQuestion(boardId, userId, userType);
+      return res.status(200).send({ message: "삭제완료" });
+    } catch (e) {
+      next(e);
+    }
   };
 }

@@ -13,6 +13,26 @@ export class BoardsService {
     }
   };
 
+  //질문글 상세조회
+  getQuestionDetail = async (userType, boardId) => {
+    const board = await this.boardsRepository.getBoardByBoardId(boardId);
+    if (userType === "manager") {
+      const questionDetailManager =
+        await this.boardsRepository.getQuestionDetailByManager(boardId);
+      if (!questionDetailManager) {
+        throw new ValidateError("질문글이 존재하지 않습니다", 404);
+      }
+      return questionDetailManager;
+    } else {
+      const questionDetail = await this.boardsRepository.getQuestionDetail(
+        boardId
+      );
+      if (!questionDetail) {
+        throw new ValidateError("질문글이 존재하지 않습니다", 404);
+      }
+      return questionDetail;
+    }
+  };
   //질문글 검색으로 조회하기
   searchQuestionList = async (key, userType) => {
     if (userType === "manager") {
@@ -36,6 +56,48 @@ export class BoardsService {
         userId
       );
       return createdQuestion;
+    } catch (e) {
+      throw e;
+    }
+  };
+
+  //질문글 수정하기
+  updateQuestion = async (boardId, userId, title, content) => {
+    try {
+      const userIdfromboardId =
+        await this.boardsRepository.getuserIdfromboardId(boardId);
+      if (!userIdfromboardId) {
+        throw new ValidateError("질문글이 존재하지 않습니다.", 404);
+      }
+      if (userIdfromboardId.userId !== userId) {
+        throw new ValidateError("권한이 없습니다.", 401);
+      }
+      const updatedQuestion = await this.boardsRepository.updateQuestion(
+        boardId,
+        title,
+        content
+      );
+      return updatedQuestion;
+    } catch (e) {
+      throw e;
+    }
+  };
+
+  //질문글 삭제하기
+  deleteQuestion = async (boardId, userId, userType) => {
+    try {
+      if (userType === "manager") {
+        return await this.boardsRepository.deleteQuestion(boardId);
+      }
+      const userIdfromboardId =
+        await this.boardsRepository.getuserIdfromboardId(boardId);
+      if (!userIdfromboardId) {
+        throw new ValidateError("질문글이 존재하지 않습니다.", 404);
+      }
+      if (userIdfromboardId.userId !== userId) {
+        throw new ValidateError("권한이 없습니다.", 401);
+      }
+      return await this.boardsRepository.deleteQuestion(boardId);
     } catch (e) {
       throw e;
     }

@@ -16,6 +16,29 @@ export class BoardsRepository {
     });
   };
 
+  //boardId를 이용해서 board가져오기
+  getBoardByBoardId = async (boardId) => {
+    return await prisma.boards.findUnique({
+      where: { boardId },
+    });
+  };
+  //질문글 상세조회 (매니저)
+  getQuestionDetailByManager = async (boardId) => {
+    return await prisma.boards.findUnique({
+      where: { boardId },
+    });
+  };
+
+  //질문글 상세조회 (일반유저)
+  getQuestionDetail = async (boardId) => {
+    return await prisma.boards.findUnique({
+      where: { boardId },
+      select: {
+        title: true,
+        content: true,
+      },
+    });
+  };
   //질문글 검색으로 조회하기 (매니저)
   searchQuestionListByManager = async (key) => {
     return await prisma.boards.findMany({
@@ -28,7 +51,7 @@ export class BoardsRepository {
     });
   };
 
-  //질문글 검색으로 조회하기 (일반회원)
+  //질문글 검색으로 조회하기 (일반유저)
   searchQuestionList = async (key) => {
     return await prisma.boards.findMany({
       where: {
@@ -53,5 +76,33 @@ export class BoardsRepository {
       },
     });
     return createdQuestion;
+  };
+
+  //boardId를 이용해서 board의 userId 찾기
+  getuserIdfromboardId = async (boardId) => {
+    const userIdfromboardId = await prisma.boards.findUnique({
+      where: { boardId },
+      select: { userId: true },
+    });
+    return userIdfromboardId;
+  };
+
+  //질문글 수정하기
+  updateQuestion = async (boardId, title, content) => {
+    const updatedQuestion = await prisma.boards.update({
+      where: { boardId },
+      data: {
+        title,
+        content,
+      },
+    });
+    return updatedQuestion;
+  };
+
+  //질문글 삭제하기
+  deleteQuestion = async (boardId) => {
+    return await prisma.boards.delete({
+      where: { boardId },
+    });
   };
 }
