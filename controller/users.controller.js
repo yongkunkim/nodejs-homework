@@ -12,6 +12,7 @@ export class UsersController {
         userId,
         userType
       );
+
       res.send({
         message: "학생을 매니저로 승급시켰습니다.",
         changedUser,

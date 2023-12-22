@@ -6,10 +6,6 @@ const router = express.Router();
 const usersController = new UsersController();
 
 //학생 매니저로 승급시키기
-router.put(
-  "/changeUserType/:userId",
-  authMiddleware,
-  usersController.changeUserTypeByManager
-);
+router.put("/:userId", authMiddleware, usersController.changeUserTypeByManager);
 
 export default router;
