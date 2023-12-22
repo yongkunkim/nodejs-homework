@@ -103,6 +103,12 @@ export class BoardsRepository {
     return updatedQuestion;
   };
 
+  //질문글에 답변이 있나 확인하기
+  checkexistAnswer = async (boardId) => {
+    return await prisma.answers.findMany({
+      where: { boardId },
+    });
+  };
   //질문글 삭제하기
   deleteQuestion = async (boardId) => {
     return await prisma.boards.delete({

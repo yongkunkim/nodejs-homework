@@ -110,6 +110,12 @@ export class AnswersService {
     if (answer.userId !== userId) {
       throw new ValidateError("권한이 없습니다.", 401);
     }
+    const selectedAnswer = await this.answersRepository.getSelectedAnswers(
+      boardId
+    );
+    if (selectedAnswer[0].answerId === answerId) {
+      throw new ValidateError("채택된 답변은 삭제할 수 없습니다.", 401);
+    }
 
     return await this.answersRepository.deleteAnswer(boardId, answerId);
   };

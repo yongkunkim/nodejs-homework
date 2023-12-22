@@ -72,6 +72,10 @@ export class BoardsService {
       if (userIdfromboardId.userId !== userId) {
         throw new ValidateError("권한이 없습니다.", 401);
       }
+      const existAnswer = await this.boardsRepository.checkexistAnswer(boardId);
+      if (existAnswer.length > 0) {
+        throw new ValidateError("답변이 있는 질문은 수정이 불가능합니다.", 401);
+      }
       const updatedQuestion = await this.boardsRepository.updateQuestion(
         boardId,
         title,
