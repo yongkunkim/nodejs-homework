@@ -46,6 +46,23 @@ export class BoardsController {
     }
   };
 
+  ////조회된 질문글 페이징처리
+  getPagedQuestionList = async (req, res, next) => {
+    try {
+      const userType = req.locals.userType;
+      const page = req.query.page;
+      if (!page) {
+        res.status(400).json({ message: "페이지를 선택해주세요." });
+      }
+      const pagedQuestionList = await this.boardsService.getPagedQuestionList(
+        userType,
+        page
+      );
+      res.status(200).send(pagedQuestionList);
+    } catch (e) {
+      next(e);
+    }
+  };
   //질문 생성하기
   createQuestion = async (req, res, next) => {
     try {

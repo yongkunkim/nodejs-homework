@@ -70,6 +70,27 @@ export class BoardsRepository {
       },
     });
   };
+
+  //조회된 질문글 페이징처리( 매니저, 회원)
+  getPagedQuestionListByManager = async (page) => {
+    const pagedQuestion = await prisma.boards.findMany({
+      take: 20,
+      skip: (page - 1) * 20,
+    });
+    return pagedQuestion;
+  };
+
+  getPagedQuestionList = async (page) => {
+    const pagedQuestion = await prisma.boards.findMany({
+      take: 20,
+      skip: (page - 1) * 20,
+      select: {
+        title: true,
+        content: true,
+      },
+    });
+    return pagedQuestion;
+  };
   //질문글 생성하기
   createQuestion = async (title, content, userId) => {
     const createdQuestion = await prisma.boards.create({

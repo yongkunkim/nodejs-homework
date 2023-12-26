@@ -41,6 +41,14 @@ export class BoardsService {
     return await this.boardsRepository.searchQuestionList(key);
   };
 
+  //조회된 질문글 페이징처리
+  getPagedQuestionList = async (userType, page) => {
+    if (userType === "manager") {
+      return await this.boardsRepository.getPagedQuestionListByManager(page);
+    } else {
+      return await this.boardsRepository.getPagedQuestionList(page);
+    }
+  };
   //질문글 생성하기
   createQuestion = async (title, content, userId, userType) => {
     try {
