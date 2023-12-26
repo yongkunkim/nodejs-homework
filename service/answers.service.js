@@ -53,10 +53,9 @@ export class AnswersService {
       }
       const answers = await this.answersRepository.findAnswerByboardId(boardId);
       if (answers.length < 1) {
-        throw new ValidateError("존재하지 않는 질문글입니다.", 403);
+        throw new ValidateError("답변이 존재하지 않는 질문글입니다.", 403);
       }
       const answer = await this.answersRepository.findAnswer(boardId, answerId);
-      console.log(answer);
       if (!answer) {
         throw new ValidateError("존재하지 않는 답변입니다", 404);
       }
